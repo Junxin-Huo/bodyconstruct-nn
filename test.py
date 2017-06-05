@@ -31,7 +31,7 @@ def main(argv=None):
     print('Building net......')
     start_time = time.time()
 
-    x = tf.placeholder(tf.float32, shape=[1, 6], name='data')
+    x = tf.placeholder(tf.float32, shape=[1, 9], name='data')
     keep_prob = tf.placeholder(tf.float32, name='prob')
     train_prediction = inference(x, keep_prob)
 
@@ -52,16 +52,12 @@ def main(argv=None):
         # saver.save(sess, 'pb_saver/net.ckpt')
         tf.train.write_graph(sess.graph_def, '.', 'data/train.pb', False)
         for i in range(train_size):
-            feed_dict = {x: np.reshape(data[i, ...], [1, 6]),
+            feed_dict = {x: np.reshape(data[i, ...], [1, 9]),
                          keep_prob: 1.0}
             tp = sess.run(train_prediction, feed_dict=feed_dict)
             if WRITE_RESULT:
-                # f.write(str(tp[0][0]) + ' ' + str(tp[0][1]) + ' ' + str(tp[0][2]) + ' ' + str(tp[0][3]) + ' ' + str(
-                #     tp[0][4]) + ' ' + str(tp[0][5]) + '\n')
                 f.write(str(tp[0][0]) + ' ' + str(tp[0][1]) + ' ' + str(tp[0][2]) + '\n')
             distance = np.square(np.reshape(tp, (-1)) - label[i, ...])
-            # distance_ave = (np.sqrt(distance[0] + distance[1] + distance[2]) + np.sqrt(
-            #     distance[3] + distance[4] + distance[5])) / 2
             distance_ave = np.sqrt(distance[0] + distance[1] + distance[2])
             distances.append(distance_ave)
 

@@ -16,7 +16,7 @@ def _variable_with_weight_decay(shape, stddev, wd, name, reuse):
 
 def inference(data, prob, reuse=False):
     with tf.variable_scope("Hid1", reuse=reuse):
-        W_hidden1 = _variable_with_weight_decay(shape=[6, 64], stddev=0.1, wd=5e-5, name='W_hidden1', reuse=reuse)
+        W_hidden1 = _variable_with_weight_decay(shape=[9, 64], stddev=0.1, wd=5e-5, name='W_hidden1', reuse=reuse)
         b_hidden1 = tf.get_variable(name='b_hidden1', shape=[64], dtype=tf.float32, initializer=tf.constant_initializer(0.0))
         h_hidden1 = tf.nn.relu(tf.matmul(data, W_hidden1) + b_hidden1)
     with tf.variable_scope("Dro1", reuse=reuse):
@@ -28,7 +28,7 @@ def inference(data, prob, reuse=False):
         h_hidden2 = tf.nn.relu(tf.matmul(h_hidden1_drop, W_hidden2) + b_hidden2)
     with tf.variable_scope("Dro2", reuse=reuse):
         h_hidden2_drop = tf.nn.dropout(h_hidden2, prob, name='drop2')
-    #
+
     with tf.variable_scope("Hid3", reuse=reuse):
         W_hidden3 = _variable_with_weight_decay(shape=[64, 32], stddev=0.1, wd=5e-5, name='W_hidden3', reuse=reuse)
         b_hidden3 = tf.get_variable(name='b_hidden3', shape=[32], dtype=tf.float32, initializer=tf.constant_initializer(0.0))

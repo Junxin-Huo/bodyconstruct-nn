@@ -10,10 +10,10 @@ from net import inference, total_loss, train, cross_entropy_loss, l2_loss
 from loader import loadDataLabel
 
 
-BATCH_SIZE = 128
+BATCH_SIZE = 1024
 
 DATADIR = 'dataset_train'
-NUM_EPOCHS = 1000
+NUM_EPOCHS = 5000
 NETPATH = 'data/net.ckpt'
 PBPATH = 'data/train.pb'
 EVAL_FREQUENCY = 5000
@@ -44,10 +44,10 @@ def main(argv=None):
         print('Building net......')
         start_time = time.time()
 
-        x = tf.placeholder(tf.float32, shape=[BATCH_SIZE, 6], name='data')
+        x = tf.placeholder(tf.float32, shape=[BATCH_SIZE, 9], name='data')
         y = tf.placeholder(tf.float32, shape=[BATCH_SIZE, 3])
         keep_prob = tf.placeholder(tf.float32, name='prob')
-        x_valid = tf.placeholder(tf.float32, shape=[validation_size, 6])
+        x_valid = tf.placeholder(tf.float32, shape=[validation_size, 9])
         y_valid = tf.placeholder(tf.float32, shape=[validation_size, 3])
 
         # Train model.
@@ -57,9 +57,9 @@ def main(argv=None):
         batch = tf.Variable(0, dtype=tf.float32)
 
         learning_rate = tf.train.exponential_decay(
-            0.01,  # Base learning rate.
+            0.1,  # Base learning rate.
             batch * BATCH_SIZE,  # Current index into the dataset.
-            train_size * 20,  # Decay step.
+            train_size * 100,  # Decay step.
             0.95,  # Decay rate.
             staircase=True)
         tf.summary.scalar('learn', learning_rate)
